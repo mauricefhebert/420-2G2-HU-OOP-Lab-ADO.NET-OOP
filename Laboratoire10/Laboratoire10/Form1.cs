@@ -12,5 +12,12 @@ namespace Laboratoire10
             string strConnection = ConfigurationManager.ConnectionStrings[""].ConnectionString;
             this.dt = new EtudiantDataContext(strConnection);
         }
+
+        /**
+         * try {
+         *  dt.nomDeLaMethod()
+         *  MessageBox("Message");
+         * } catch (Exception ex) { MessageBox.Show(ex.Message); }
+         */
     }
 }
