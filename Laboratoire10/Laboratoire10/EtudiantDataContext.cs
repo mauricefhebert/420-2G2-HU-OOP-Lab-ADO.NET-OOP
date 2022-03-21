@@ -20,55 +20,95 @@ namespace Laboratoire10
         }
 
         //Method pour manipuler les données
-        /** Lire
-         * List<listName> listName = new List<listName>();
+        public List<Programme> GetAllProgrammes()
+        {
+            List<Programme> programmes = new List<Programme>(8);
             // Etablir la connection
-                cn = new SqlConnection(ConnectionString);
-                cn.Open();
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
             // Definir ma requete sql a executer
-            string requete = "SELECT CustomerID, ContactName, CompanyName, Country, Phone FROM Customers";
+            string requete = "SELECT ProgrammeName FROM Programmes";
             // Executer la requete
             SqlCommand cmd = new SqlCommand(requete, cn);
             SqlDataReader reader = cmd.ExecuteReader();
             // Récupérer les résultats de la requete
-            while(reader.Read()) 
+            while (reader.Read())
             {
-                listName.Add(new listName() { Numero = reader.GetString(0), 
-                                            Nom =reader.GetString(1),
-                                            Ville=reader.GetString(2),
-                                            Telephone=reader.GetString(3) 
-                                           });
+                programmes.Add(new Programme()
+                {
+                    ProgrammeName = reader.GetString(0),
+                });
             }
             // Fermer le reader
-            reader.Close ();
+            reader.Close();
             //Fermer la connection
             cn.Close();
-            //retourner la liste des clients 
-            return clients;
-         */
-
-        /** Ecrire, Update et Supprimer
-         * //Ouvrir la connection
+            //retourner la liste des programmes
+            return programmes;
+        }
+        public void InsertProgramme(Programme programme)
+        {
             cn = new SqlConnection(ConnectionString);
             cn.Open();
 
             //Definir la requete sql avec parametres
-            string requete = "INSERT INTO Customers (CustomerID, ContactName, CompanyName, Country, Phone) VALUES (@num, @nom, @comp, @pays, @tel)";
+            string requete = "INSERT INTO Programmes (ProgrammeName) VALUES (@Prog)";
 
             //Creer mon object commmande
-            SqlCommand cmd = new SqlCommand (requete, cn);
+            SqlCommand cmd = new SqlCommand(requete, cn);
 
             //Donner des valeur au parametre
-            cmd.Parameters.AddWithValue("num", client.Numero);
-            cmd.Parameters.AddWithValue("nom", client.Nom);
-            cmd.Parameters.AddWithValue("comp", client.Compagnie);
-            cmd.Parameters.AddWithValue("pays", client.Ville);
-            cmd.Parameters.AddWithValue("tel", client.Telephone);
+            cmd.Parameters.AddWithValue("Prog", programme.ProgrammeName);
 
             //Executer ma requete
             cmd.ExecuteNonQuery();
             //Fermer la connection
             cn.Close();
-         */
+        }
+
+        public void DeleteProgramme(int numProg)
+        {
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+
+            //Definir la requete sql avec parametres
+            string requete = "DELETE FROM Programmes WHERE ProgrammesId = @Prog";
+
+            //Creer mon object commmande
+            SqlCommand cmd = new SqlCommand(requete, cn);
+
+            //Donner des valeur au parametre
+            cmd.Parameters.AddWithValue("Prog", numProg);
+
+            //Executer ma requete
+            cmd.ExecuteNonQuery();
+            //Fermer la connection
+            cn.Close();
+        }
+
+        public void UpdateProgramme(Programme programme)
+        {
+            //Ouvrir la connection
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+
+            //Definir la requete sql avec parametres
+            string requete =
+                "UPDATE Programmes " +
+                "SET ProgrammeName = @prog " +
+                "WHERE ProgrammesId = @numProg";
+
+            //Creer mon object commmande
+            SqlCommand cmd = new SqlCommand(requete, cn);
+
+            //Donner des valeur au parametre
+            cmd.Parameters.AddWithValue("numProg", programme.ProgrammesId);
+            cmd.Parameters.AddWithValue("prog", programme.ProgrammeName);
+
+            //Executer ma requete
+            cmd.ExecuteNonQuery();
+            //Fermer la connection
+            cn.Close();
+        }
     }
 }

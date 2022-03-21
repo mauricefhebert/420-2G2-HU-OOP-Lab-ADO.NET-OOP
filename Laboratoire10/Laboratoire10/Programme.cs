@@ -8,6 +8,7 @@ namespace Laboratoire10
 {
     internal class Programme
     {
+        public int ProgrammesId { get; set; }
         public string ProgrammeName { get; set; }
     }
 }
