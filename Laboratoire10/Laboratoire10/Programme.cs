@@ -10,5 +10,11 @@ namespace Laboratoire10
     {
         public int ProgrammesId { get; set; }
         public string ProgrammeName { get; set; }
+
+        internal Programme(int programmesId, string programmeName)
+        {
+            this.ProgrammesId = programmesId;
+            this.ProgrammeName = programmeName;
+        }
     }
 }

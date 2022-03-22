@@ -27,17 +27,14 @@ namespace Laboratoire10
             cn = new SqlConnection(ConnectionString);
             cn.Open();
             // Definir ma requete sql a executer
-            string requete = "SELECT ProgrammeName FROM Programmes";
+            string requete = "SELECT ProgrammesId, ProgrammeName FROM Programmes";
             // Executer la requete
             SqlCommand cmd = new SqlCommand(requete, cn);
             SqlDataReader reader = cmd.ExecuteReader();
             // Récupérer les résultats de la requete
             while (reader.Read())
             {
-                programmes.Add(new Programme()
-                {
-                    ProgrammeName = reader.GetString(0),
-                });
+                programmes.Add(new Programme(reader.GetInt32(0), reader.GetString(1)));
             }
             // Fermer le reader
             reader.Close();
@@ -52,13 +49,14 @@ namespace Laboratoire10
             cn.Open();
 
             //Definir la requete sql avec parametres
-            string requete = "INSERT INTO Programmes (ProgrammeName) VALUES (@Prog)";
+            string requete = "INSERT INTO Programmes (ProgrammesId, ProgrammeName) VALUES (@progId, @ProgName)";
 
             //Creer mon object commmande
             SqlCommand cmd = new SqlCommand(requete, cn);
 
             //Donner des valeur au parametre
-            cmd.Parameters.AddWithValue("Prog", programme.ProgrammeName);
+            cmd.Parameters.AddWithValue("progId", programme.ProgrammesId);
+            cmd.Parameters.AddWithValue("ProgName", programme.ProgrammeName);
 
             //Executer ma requete
             cmd.ExecuteNonQuery();
@@ -109,6 +107,149 @@ namespace Laboratoire10
             cmd.ExecuteNonQuery();
             //Fermer la connection
             cn.Close();
+        }
+
+        //Etudiant
+        public List<Etudiant> GetAllEtudiant()
+        {
+            List<Etudiant> etudiant = new List<Etudiant>(8);
+            // Etablir la connection
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+            // Definir ma requete sql a executer
+            string requete = "SELECT EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeId FROM Etudiants";
+            // Executer la requete
+            SqlCommand cmd = new SqlCommand(requete, cn);
+            SqlDataReader reader = cmd.ExecuteReader();
+            // Récupérer les résultats de la requete
+            while (reader.Read())
+            {
+                etudiant.Add(new Etudiant
+                (
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetDateTime(4),
+                    reader.GetChar(5),
+                     reader.GetInt32(6)));
+            }
+            // Fermer le reader
+            reader.Close();
+            //Fermer la connection
+            cn.Close();
+            //retourner la liste des programmes
+            return etudiant;
+        }
+        public void InsertEtudiant(Etudiant etudiant)
+        {
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+
+            //Definir la requete sql avec parametres
+            string requete = "INSERT INTO Etudiants (EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeId) " +
+                "VALUES (@numEtudiant,@first,@last,@address,@birthday,@gender,@progId)";
+
+            //Creer mon object commmande
+            SqlCommand cmd = new SqlCommand(requete, cn);
+
+            //Donner des valeur au parametre
+            cmd.Parameters.AddWithValue("numEtudiant", etudiant.EtudiantId);
+            cmd.Parameters.AddWithValue("first", etudiant.FirstName);
+            cmd.Parameters.AddWithValue("last", etudiant.LastName);
+            cmd.Parameters.AddWithValue("address", etudiant.Address);
+            cmd.Parameters.AddWithValue("birthday", etudiant.BirthDay);
+            cmd.Parameters.AddWithValue("gender", etudiant.Gender);
+            cmd.Parameters.AddWithValue("progId", etudiant.FK_ProgrammesId);
+
+            //Executer ma requete
+            cmd.ExecuteNonQuery();
+            //Fermer la connection
+            cn.Close();
+        }
+
+        public void DeleteEtudiant(int numEtudiant)
+        {
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+
+            //Definir la requete sql avec parametres
+            string requete = "DELETE FROM Etudiants WHERE EtudiantId = @id";
+
+            //Creer mon object commmande
+            SqlCommand cmd = new SqlCommand(requete, cn);
+
+            //Donner des valeur au parametre
+            cmd.Parameters.AddWithValue("id", numEtudiant);
+
+            //Executer ma requete
+            cmd.ExecuteNonQuery();
+            //Fermer la connection
+            cn.Close();
+        }
+
+        public void UpdateEtudiant(Etudiant etudiant)
+        {
+            //Ouvrir la connection
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+
+            //Definir la requete sql avec parametres
+            string requete =
+                "UPDATE Etudiants " +
+                "SET FirstName = @first, LastName = @last, Address = @address, BirthDay = @birthday, Gender = @gender, ProgrammeId = @progId " +
+                "WHERE EtudiantId = @numEtudiant";
+
+            //@first,@last,@address,@birthday,@gender,@progId
+            //Creer mon object commmande
+            SqlCommand cmd = new SqlCommand(requete, cn);
+
+            //Donner des valeur au parametre
+            cmd.Parameters.AddWithValue("numEtudiant", etudiant.EtudiantId);
+            cmd.Parameters.AddWithValue("first", etudiant.FirstName);
+            cmd.Parameters.AddWithValue("last", etudiant.LastName);
+            cmd.Parameters.AddWithValue("address", etudiant.Address);
+            cmd.Parameters.AddWithValue("birthday", etudiant.BirthDay);
+            cmd.Parameters.AddWithValue("gender", etudiant.Gender);
+            cmd.Parameters.AddWithValue("progId", etudiant.FK_ProgrammesId);
+
+            //Executer ma requete
+            cmd.ExecuteNonQuery();
+            //Fermer la connection
+            cn.Close();
+        }
+
+        //A completer
+        public List<Etudiant> GetEtudiantsByProgramme(int numProg)
+        {
+            List<Etudiant> etudiant = new List<Etudiant>(8);
+            // Etablir la connection
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+            // Definir ma requete sql a executer
+            string requete = "SELECT EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeId FROM Etudiants";
+            // Executer la requete
+            SqlCommand cmd = new SqlCommand(requete, cn);
+            SqlDataReader reader = cmd.ExecuteReader();
+            // Récupérer les résultats de la requete
+            while (reader.Read())
+            {
+                etudiant.Add(new Etudiant
+                    (
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetDateTime(4),
+                    reader.GetChar(5),
+                    reader.GetInt32(6)));
+            }
+            // Fermer le reader
+            reader.Close();
+            //Fermer la connection
+            cn.Close();
+            //retourner la liste des programmes
+            return etudiant;
         }
     }
 }
