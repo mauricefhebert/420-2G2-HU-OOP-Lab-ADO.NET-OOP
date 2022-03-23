@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+/**
+ * Maurice filiatreault hebert
+ * 2195109
+ */
 namespace Laboratoire10
 {
     internal class EtudiantDataContext
@@ -110,29 +113,66 @@ namespace Laboratoire10
         }
 
         //Etudiant
-        public List<Etudiant> GetAllEtudiant()
+        public List<EtudiantGrid> GetEtudiant(int numEtudiant)
         {
-            List<Etudiant> etudiant = new List<Etudiant>(8);
+            List<EtudiantGrid> etudiant = new List<EtudiantGrid>(8);
             // Etablir la connection
             cn = new SqlConnection(ConnectionString);
             cn.Open();
             // Definir ma requete sql a executer
-            string requete = "SELECT EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeId FROM Etudiants";
+            string requete = "SELECT EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeName " +
+                "FROM Etudiants " +
+                "JOIN Programmes ON Etudiants.ProgrammeId = Programmes.ProgrammesId " +
+                "WHERE EtudiantId = @numEtudiant";
             // Executer la requete
             SqlCommand cmd = new SqlCommand(requete, cn);
+            cmd.Parameters.AddWithValue("numEtudiant", numEtudiant);
             SqlDataReader reader = cmd.ExecuteReader();
             // Récupérer les résultats de la requete
             while (reader.Read())
             {
-                etudiant.Add(new Etudiant
+                etudiant.Add(new EtudiantGrid
                 (
                     reader.GetInt32(0),
                     reader.GetString(1),
                     reader.GetString(2),
                     reader.GetString(3),
                     reader.GetDateTime(4),
-                    reader.GetChar(5),
-                     reader.GetInt32(6)));
+                    Convert.ToChar(reader.GetValue(5)),
+                    reader.GetString(6)));
+            }
+            // Fermer le reader
+            reader.Close();
+            //Fermer la connection
+            cn.Close();
+            //retourner la liste des programmes
+            return etudiant;
+        }
+        public List<EtudiantGrid> GetAllEtudiant()
+        {
+            List<EtudiantGrid> etudiant = new List<EtudiantGrid>(8);
+            // Etablir la connection
+            cn = new SqlConnection(ConnectionString);
+            cn.Open();
+            // Definir ma requete sql a executer
+            string requete = "SELECT EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeName " +
+                "FROM Etudiants " +
+                "JOIN Programmes ON Etudiants.ProgrammeId = Programmes.ProgrammesId";
+            // Executer la requete
+            SqlCommand cmd = new SqlCommand(requete, cn);
+            SqlDataReader reader = cmd.ExecuteReader();
+            // Récupérer les résultats de la requete
+            while (reader.Read())
+            {
+                etudiant.Add(new EtudiantGrid
+                (
+                    reader.GetInt32(0),
+                    reader.GetString(1),
+                    reader.GetString(2),
+                    reader.GetString(3),
+                    reader.GetDateTime(4),
+                    Convert.ToChar(reader.GetValue(5)),
+                    reader.GetString(6)));
             }
             // Fermer le reader
             reader.Close();
@@ -197,7 +237,7 @@ namespace Laboratoire10
             //Definir la requete sql avec parametres
             string requete =
                 "UPDATE Etudiants " +
-                "SET FirstName = @first, LastName = @last, Address = @address, BirthDay = @birthday, Gender = @gender, ProgrammeId = @progId " +
+                "SET FirstName = @first, LastName = @last, Address = @address, Gender = @gender, ProgrammeId = @progId " +
                 "WHERE EtudiantId = @numEtudiant";
 
             //@first,@last,@address,@birthday,@gender,@progId
@@ -209,7 +249,6 @@ namespace Laboratoire10
             cmd.Parameters.AddWithValue("first", etudiant.FirstName);
             cmd.Parameters.AddWithValue("last", etudiant.LastName);
             cmd.Parameters.AddWithValue("address", etudiant.Address);
-            cmd.Parameters.AddWithValue("birthday", etudiant.BirthDay);
             cmd.Parameters.AddWithValue("gender", etudiant.Gender);
             cmd.Parameters.AddWithValue("progId", etudiant.FK_ProgrammesId);
 
@@ -220,29 +259,34 @@ namespace Laboratoire10
         }
 
         //A completer
-        public List<Etudiant> GetEtudiantsByProgramme(int numProg)
+        public List<EtudiantGrid> GetEtudiantsByProgramme(int numProg)
         {
-            List<Etudiant> etudiant = new List<Etudiant>(8);
+            List<EtudiantGrid> etudiant = new List<EtudiantGrid>(8);
             // Etablir la connection
             cn = new SqlConnection(ConnectionString);
             cn.Open();
             // Definir ma requete sql a executer
-            string requete = "SELECT EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeId FROM Etudiants";
+            string requete = 
+                "SELECT EtudiantId,FirstName,LastName,Address,BirthDay,Gender,ProgrammeName " +
+                "FROM Etudiants " +
+                "JOIN Programmes ON Etudiants.ProgrammeId = Programmes.ProgrammesId " +
+                "WHERE ProgrammeId = @numProg";
             // Executer la requete
             SqlCommand cmd = new SqlCommand(requete, cn);
+            cmd.Parameters.AddWithValue("numProg", numProg);
             SqlDataReader reader = cmd.ExecuteReader();
             // Récupérer les résultats de la requete
             while (reader.Read())
             {
-                etudiant.Add(new Etudiant
+                etudiant.Add(new EtudiantGrid
                     (
                     reader.GetInt32(0),
                     reader.GetString(1),
                     reader.GetString(2),
                     reader.GetString(3),
                     reader.GetDateTime(4),
-                    reader.GetChar(5),
-                    reader.GetInt32(6)));
+                    Convert.ToChar(reader.GetValue(5)),
+                    reader.GetString(6)));
             }
             // Fermer le reader
             reader.Close();

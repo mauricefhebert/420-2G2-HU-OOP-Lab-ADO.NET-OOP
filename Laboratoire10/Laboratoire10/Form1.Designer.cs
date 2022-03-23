@@ -54,11 +54,10 @@
             this.label3 = new System.Windows.Forms.Label();
             this.tabProgramme = new System.Windows.Forms.TabPage();
             this.dgProg = new System.Windows.Forms.DataGridView();
-            this.Column1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.btnProgrammesAfficher = new System.Windows.Forms.Button();
             this.btnProgrammesModifier = new System.Windows.Forms.Button();
             this.btnProgrammesSupprimer = new System.Windows.Forms.Button();
+            this.btnProgrammeRechercher = new System.Windows.Forms.Button();
             this.btnProgrammesAjouter = new System.Windows.Forms.Button();
             this.txtProgDesc = new System.Windows.Forms.TextBox();
             this.txtProgNumero = new System.Windows.Forms.TextBox();
@@ -329,6 +328,7 @@
             this.tabProgramme.Controls.Add(this.btnProgrammesAfficher);
             this.tabProgramme.Controls.Add(this.btnProgrammesModifier);
             this.tabProgramme.Controls.Add(this.btnProgrammesSupprimer);
+            this.tabProgramme.Controls.Add(this.btnProgrammeRechercher);
             this.tabProgramme.Controls.Add(this.btnProgrammesAjouter);
             this.tabProgramme.Controls.Add(this.txtProgDesc);
             this.tabProgramme.Controls.Add(this.txtProgNumero);
@@ -345,9 +345,6 @@
             // dgProg
             // 
             this.dgProg.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgProg.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Column1,
-            this.Column2});
             this.dgProg.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.dgProg.Location = new System.Drawing.Point(3, 183);
             this.dgProg.Name = "dgProg";
@@ -355,33 +352,21 @@
             this.dgProg.Size = new System.Drawing.Size(762, 212);
             this.dgProg.TabIndex = 3;
             // 
-            // Column1
-            // 
-            this.Column1.DataPropertyName = "ProgrammesId";
-            this.Column1.HeaderText = "Numéro Programme";
-            this.Column1.Name = "Column1";
-            // 
-            // Column2
-            // 
-            this.Column2.DataPropertyName = "ProgrammeName";
-            this.Column2.HeaderText = "Nom du Programme";
-            this.Column2.Name = "Column2";
-            // 
             // btnProgrammesAfficher
             // 
             this.btnProgrammesAfficher.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnProgrammesAfficher.Location = new System.Drawing.Point(504, 104);
+            this.btnProgrammesAfficher.Location = new System.Drawing.Point(542, 106);
             this.btnProgrammesAfficher.Name = "btnProgrammesAfficher";
-            this.btnProgrammesAfficher.Size = new System.Drawing.Size(97, 36);
+            this.btnProgrammesAfficher.Size = new System.Drawing.Size(206, 36);
             this.btnProgrammesAfficher.TabIndex = 5;
-            this.btnProgrammesAfficher.Text = "Afficher";
+            this.btnProgrammesAfficher.Text = "Afficher les etudiant";
             this.btnProgrammesAfficher.UseVisualStyleBackColor = true;
             this.btnProgrammesAfficher.Click += new System.EventHandler(this.btnProgrammesAfficher_Click);
             // 
             // btnProgrammesModifier
             // 
             this.btnProgrammesModifier.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnProgrammesModifier.Location = new System.Drawing.Point(392, 104);
+            this.btnProgrammesModifier.Location = new System.Drawing.Point(227, 106);
             this.btnProgrammesModifier.Name = "btnProgrammesModifier";
             this.btnProgrammesModifier.Size = new System.Drawing.Size(97, 36);
             this.btnProgrammesModifier.TabIndex = 4;
@@ -392,7 +377,7 @@
             // btnProgrammesSupprimer
             // 
             this.btnProgrammesSupprimer.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnProgrammesSupprimer.Location = new System.Drawing.Point(280, 104);
+            this.btnProgrammesSupprimer.Location = new System.Drawing.Point(124, 106);
             this.btnProgrammesSupprimer.Name = "btnProgrammesSupprimer";
             this.btnProgrammesSupprimer.Size = new System.Drawing.Size(97, 36);
             this.btnProgrammesSupprimer.TabIndex = 3;
@@ -400,10 +385,21 @@
             this.btnProgrammesSupprimer.UseVisualStyleBackColor = true;
             this.btnProgrammesSupprimer.Click += new System.EventHandler(this.btnProgrammesSupprimer_Click);
             // 
+            // btnProgrammeRechercher
+            // 
+            this.btnProgrammeRechercher.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.btnProgrammeRechercher.Location = new System.Drawing.Point(330, 106);
+            this.btnProgrammeRechercher.Name = "btnProgrammeRechercher";
+            this.btnProgrammeRechercher.Size = new System.Drawing.Size(206, 36);
+            this.btnProgrammeRechercher.TabIndex = 2;
+            this.btnProgrammeRechercher.Text = "Afficher les programme";
+            this.btnProgrammeRechercher.UseVisualStyleBackColor = true;
+            this.btnProgrammeRechercher.Click += new System.EventHandler(this.btnProgrammeRechercher_Click_1);
+            // 
             // btnProgrammesAjouter
             // 
             this.btnProgrammesAjouter.Font = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.btnProgrammesAjouter.Location = new System.Drawing.Point(168, 104);
+            this.btnProgrammesAjouter.Location = new System.Drawing.Point(21, 106);
             this.btnProgrammesAjouter.Name = "btnProgrammesAjouter";
             this.btnProgrammesAjouter.Size = new System.Drawing.Size(97, 36);
             this.btnProgrammesAjouter.TabIndex = 2;
@@ -503,7 +499,6 @@
         private TextBox txtLastNameEtudiant;
         private TextBox txtFirstNameEtudiant;
         private TextBox txtNumEtudiant;
-        private DataGridViewTextBoxColumn Column1;
-        private DataGridViewTextBoxColumn Column2;
+        private Button btnProgrammeRechercher;
     }
 }
